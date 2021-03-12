@@ -1,24 +1,26 @@
+import React, {} from 'react';
+
+// CSS
 import './App.css';
 import 'bootstrap/scss/bootstrap.scss'
-import FormsPage from "./pages/foo/forms.page";
 
-// import FetchDataPage from "./pages/foo/fetch-data-page";
-// import HomePage from "./pages/home/homepage.component";
-// import Foo from "./pages/foo/foo.page";
-// import UseEffectPage from "./pages/foo/use-effect-page";
+// Router
+import { Route, Switch } from "react-router-dom";
 
+// Pages
+import HomePage from "./pages/home/homepage.component";
+import ShopPage from "./pages/shop/shop.page";
+import Header from "./components/header/header.component";
 
 function App() {
 
-
   return (
     <>
-
-        <FormsPage/>
-     {/*<FetchDataPage />*/}
-     {/*   <UseEffectPage />*/}
-     {/*   <Foo/>*/}
-     {/*<HomePage />*/}
+        <Header/>
+        <Switch>
+            <Route exact path="/" component={HomePage}/>
+            <Route exact path="/shop" component={ShopPage}/>
+        </Switch>
     </>
   );
 }

@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
 
-function App() {
+// redux
+import {connect} from "react-redux";
+
+// CSS
+import './App.css';
+import 'bootstrap/scss/bootstrap.scss'
+
+// Router
+import { Redirect, Route, Switch } from "react-router-dom";
+
+// Pages
+import HomePage from "./pages/home/homepage.component";
+import ShopPage from "./pages/shop/shop.page";
+import Header from "./components/header/header.component";
+import { isAuthenticatedUser } from "./redux/users/user.actions";
+import SignInSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.page";
+
+function App({isLoggedIn, isAuthenticated}) {
+
+    useEffect(() => {
+        isAuthenticated();
+    });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Header/>
+        <Switch>
+            <Route exact path="/" component={HomePage}/>
+            <Route exact path="/shop" component={ShopPage}/>
+            <Route
+                exact
+                path="/sign-in-and-sign-up"
+                render={() =>
+                    isLoggedIn ? (
+                        <Redirect to='/' />
+                    ) : (
+                        <SignInSignUpPage />
+                    )
+                }
+            />
+        </Switch>
+    </>
   );
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ( {
+    isAuthenticated: () => dispatch(isAuthenticatedUser())
+})
+
+const mapStateToProps = state => {
+    return {
+        isLoggedIn: state.authenticate.isLoggedIn
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);
